@@ -38,7 +38,14 @@ directory "#{node[:syslog_ng][:config_dir]}/conf.d" do
   action :create
 end
 
-cookbook_file "#{node[:syslog_ng][:config_dir]}/conf.d/00base" do
+#cookbook_file "#{node[:syslog_ng][:config_dir]}/conf.d/00base" do
+#  owner node[:syslog_ng][:user]
+#  group node[:syslog_ng][:group]
+#  mode 00640
+#end
+
+template "#{node[:syslog_ng][:config_dir]}/conf.d/00base" do
+  source "00base.erb"
   owner node[:syslog_ng][:user]
   group node[:syslog_ng][:group]
   mode 00640

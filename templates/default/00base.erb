@@ -1,0 +1,68 @@
+# This file is managed by Chef
+# Local changes will be overwritten
+#
+#  === Caution ===
+# syslog-ng.conf file will be overwritten based on conf.d files
+# Make changes to conf.d files only
+# 
+# /etc/syslog-ng/conf.d/00base
+#
+# syslog-ng  base configuration file.
+#
+# This should behave pretty much like the original syslog on RedHat. But
+# it could be configured a lot smarter.
+#
+# See syslog-ng(8) and syslog-ng.conf(5) for more information.
+#
+
+options {
+  sync (0);
+  time_reopen (10);
+  log_fifo_size (1000);
+  long_hostnames (off);
+  use_dns (no);
+  use_fqdn (no);
+  create_dirs (yes);
+  keep_hostname (yes);
+};
+
+#Source Definitions
+
+source s_system {
+        file("/var/log/boot.log" follow_freq(1) flags(no-parse));
+        file("/var/log/dmesg" follow_freq(1) flags(no-parse));
+        file("/var/log/messages" follow_freq(1) flags(no-parse));
+        file("/var/log/syslog" follow_freq(1) flags(no-parse));
+};
+
+source s_security {
+        file("/var/log/auth.log" follow_freq(1) flags(no-parse));
+        file("/var/log/ufw.log" follow_freq(1) flags(no-parse));
+        file("/var/log/audit/audit.log" follow_freq(1) flags(no-parse));
+};
+
+#Destination Definitions
+
+destination d_loggly_system {
+  tcp("logs.loggly.com" port(<%= node[:loggly][:system][:port] %>));
+};
+
+
+destination d_loggly_security {
+  tcp("logs.loggly.com" port(<%= node[:loggly][:security][:port] %>));
+};
+
+destination d_loggly_application {
+  tcp("logs.loggly.com" port(<%= node[:loggly][:application][:port] %>));
+};
+
+#Log Forwarding 
+
+
+log { source(s_system); destination(d_loggly_system); };
+log { source(s_security); destination(d_loggly_security); };
+
+
+#
+
+# Remember to add an empty line at the end of file

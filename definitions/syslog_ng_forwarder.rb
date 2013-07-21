@@ -25,9 +25,6 @@ define :syslog_ng_forwarder, :template => "syslog_ng_forwarder.erb" do
     :index => params[:index] || "02",
     :cookbook => params[:cookbook] || "syslog-ng",
     :source_name => params[:source_name],
-    :destination_host => params[:destination_host],
-    :destination_port => params[:destination_port] || "514",
-    :destination_protocol => params[:destination_protocol] || "udp",
   }
 
   # filter_name is optional

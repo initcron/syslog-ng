@@ -4,8 +4,8 @@
 # <%= node[:syslog_ng][:config_dir] %>/conf.d/<%= [@application[:index], @application[:name]].join %>
 #
 
-source s_udp_<%= @application[:name] %> {
-  udp (ip(<%= @application[:host] %>) port(<%= @application[:port] %>));
+source s_<%= @application[:name] %> {
+  file(<%= @application[:logpath] %> follow_freq(1) flags(no-parse));
 };
 
 # do not forget the empty line

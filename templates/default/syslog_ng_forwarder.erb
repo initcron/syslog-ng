@@ -4,16 +4,13 @@
 # <%= node[:syslog_ng][:config_dir] %>/conf.d/<%= [@application[:index], @application[:name]].join %>
 #
 
-destination d_<%= @application[:destination_protocol] %>_<%= @application[:name] %> {
-  <%= @application[:destination_protocol] %>( "<%= @application[:destination_host] %>" port(<%= @application[:destination_port] %>) );
-};
 
 log {
-  source(s_udp_<%= @application[:source_name] %>);
+  source(s_<%= @application[:source_name] %>);
   <% if @application[:filter_name] -%> 
     filter(f_<%= @application[:filter_name] %>);
   <% end -%> 
-  destination(d_<%= @application[:destination_protocol] %>_<%= @application[:name] %>);
+  destination(d_loggly_application);
 };
 
 # do not forget the empty line

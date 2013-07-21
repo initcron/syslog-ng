@@ -25,8 +25,7 @@ define :syslog_ng_source, :template => "syslog_ng_source.erb" do
     :name => params[:name],
     :index => params[:index] || "02",
     :cookbook => params[:cookbook] || "syslog-ng",
-    :host => params[:host] || "127.0.0.1",
-    :port => params[:port] || "514",
+    :logpath => params[:logpath],
   }
 
   template "#{node[:syslog_ng][:config_dir]}/conf.d/#{application[:index]}#{application[:name]}" do
