@@ -25,11 +25,11 @@ cookbook_file "#{node[:syslog_ng][:config_dir]}/syslog-ng.conf" do
   mode 00640
 end
 
-cookbook_file "/etc/init.d/syslog-ng" do
-  owner node[:syslog_ng][:user]
-  group node[:syslog_ng][:group]
-  mode 00755
-end
+#cookbook_file "/etc/init.d/syslog-ng" do
+#  owner node[:syslog_ng][:user]
+#  group node[:syslog_ng][:group]
+#  mode 00755
+#end
 
 directory "#{node[:syslog_ng][:config_dir]}/conf.d" do
   owner node[:syslog_ng][:user]
@@ -38,11 +38,19 @@ directory "#{node[:syslog_ng][:config_dir]}/conf.d" do
   action :create
 end
 
-#cookbook_file "#{node[:syslog_ng][:config_dir]}/conf.d/00base" do
-#  owner node[:syslog_ng][:user]
-#  group node[:syslog_ng][:group]
-#  mode 00640
-#end
+directory "#{node[:syslog_ng][:config_dir]}/ca.d" do
+  owner node[:syslog_ng][:user]
+  group node[:syslog_ng][:group]
+  mode 00750
+  action :create
+end
+
+cookbook_file "#{node[:syslog_ng][:config_dir]}/ca.d/loggly_full.crt" do
+  source "tls/loggly_full.crt"
+  owner node[:syslog_ng][:user]
+  group node[:syslog_ng][:group]
+  mode 00640
+end
 
 template "#{node[:syslog_ng][:config_dir]}/conf.d/00base" do
   source "00base.erb"
